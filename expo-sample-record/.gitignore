@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log*
+dist/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+*.keystore
+*.jks
+
+# Xcode/Android build artifacts if prebuilt
+ios/Pods/
+ios/build/
+android/app/build/
+android/.gradle/
+android/build/
+*.iml
+.gradle/
+

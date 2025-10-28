@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "SampleRecordExpo",
+    "slug": "sample-record-expo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.sampleRecordExpo",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"],
+        "NSMicrophoneUsageDescription": "This app records audio in the background."
+      }
+    },
+    "android": {},
+    "web": { "bundler": "metro" },
+    "plugins": [
+      [
+        "react-native-audio-api/expo-plugin",
+        {
+          "iosMicrophonePermission": "録音のためマイクへのアクセスを許可してください。",
+          "iosBackgroundMode": true,
+          "androidPermissions": ["android.permission.RECORD_AUDIO"],
+          "androidForegroundService": true
+        }
+      ]
+    ]
+  }
+}
