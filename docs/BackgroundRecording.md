@@ -2,153 +2,137 @@
 
 # iOS Background Recording Without Affecting Other Audio
 
-This document captures the exact setup needed to:
-- Record audio in the background
-- Keep other apps’ audio (YouTube/Music) unaffected (no ducking)
-- Preserve AirPods output quality (A2DP) while recording via the iPhone’s built‑in mic
+This guide explains how to build an iOS recorder that:
+- Records in foreground and background
+- Does not reduce other apps’ volume (no ducking)
+- Keeps AirPods output in high quality (A2DP) by recording with the iPhone’s built‑in mic
 
-It also explains the root causes of common failures and how we fixed them here.
+It focuses on platform‑aligned configuration, not on a specific bug.
 
-## Root Cause (What broke earlier)
-- Background mode wasn’t effectively enabled in the target’s actual Info.plist, so iOS suspended the app on background and the recorder stopped.
-- Switching the session to `.record` (instead of `.playAndRecord`) also changed the route/behavior and contributed to “no audio recorded” in some cases.
-- The app wasn’t explicitly maintaining an active audio session nor a `UIBackgroundTask` across background transitions, so the system could suspend it while the recorder hadn’t fully anchored a background audio task yet.
+## 1) Capabilities and Info.plist
+- Add Background Modes capability (or set Info.plist directly).
+- Required plist keys:
+  - `NSMicrophoneUsageDescription`
+  - `UIBackgroundModes` → include `audio`
 
-We fixed this by:
-- Supplying an explicit `Info.plist` with `UIBackgroundModes = audio`
-- Returning to `.playAndRecord` + the right options
-- Re‑activating the session on background and keeping a short `UIBackgroundTask` around the transition
-
-## Checklist
-- Info.plist
-  - `NSMicrophoneUsageDescription` – required
-  - `UIBackgroundModes` → `audio`
-- Signing & Capabilities
-  - Background Modes → Audio（UI上で追加できない環境でも、Info.plistに `UIBackgroundModes=audio` が入っていれば機能します）
-- AVAudioSession
-  - Category: `.playAndRecord`
-  - Options: `[.mixWithOthers, .allowBluetoothA2DP, .defaultToSpeaker]`
-    - Do NOT include `.duckOthers`
-    - Avoid `.allowBluetooth` (HFP) if you want to keep AirPods in high‑quality A2DP; record from built‑in mic instead
-  - Prefer the built‑in mic as input to avoid BT HFP fallback
-- Lifecycle
-  - Observe `UIApplication.didEnterBackground` / `willEnterForeground`
-  - Call `try setActive(true)` when entering background and ensure the recorder continues (`recorder.record()`)
-  - Hold a short `UIBackgroundTask` through the transition (begin/end)
-- Interruptions & routes
-  - Observe `AVAudioSession.interruptionNotification` and `routeChangeNotification`
-  - On interruption end: re‑activate the session and resume the recorder if needed
-  - On route change: keep preferring built‑in mic
-
-## Required Info.plist (excerpt)
+Example (Info.plist excerpt):
 ```xml
 <key>NSMicrophoneUsageDescription</key>
 <string>音声を録音するためにマイクを使用します。</string>
 <key>UIBackgroundModes</key>
 <array>
   <string>audio</string>
-  <!-- (Optional) 'processing' if you perform audio processing in background -->
-  <!-- <string>processing</string> -->
-  <!-- Do NOT add 'voip' unless you implement proper VoIP behavior. -->
-  <!-- <string>voip</string> -->
-  <!-- 'external-accessory' only when using MFi accessories. -->
 </array>
 ```
 
-In this repo: `SampleRecord/SampleRecord/Info.plist`
+Notes:
+- Using Info.plist directly is sufficient even if the Capabilities UI does not show Background Modes.
+- Test on a real device; Simulator background behavior differs.
 
-## AVAudioSession Setup
+## 2) Audio Session Strategy
+- Category: `.playAndRecord`
+- Mode: `.default` (or `.measurement` for low‑latency)
+- Options:
+  - `.mixWithOthers` (coexist with other audio; do not duck others)
+  - `.allowBluetoothA2DP` (high‑quality Bluetooth output only)
+  - `.defaultToSpeaker` (optional)
+- Avoid:
+  - `.duckOthers` (lowers other audio)
+  - `.allowBluetooth` (routes through HFP when using headset mic, lowering quality)
+
+Example:
 ```swift
-try AVAudioSession.sharedInstance().setCategory(
-    .playAndRecord,
-    mode: .default,
-    options: [.mixWithOthers, .allowBluetoothA2DP, .defaultToSpeaker]
+let session = AVAudioSession.sharedInstance()
+try session.setCategory(
+  .playAndRecord,
+  mode: .default,
+  options: [.mixWithOthers, .allowBluetoothA2DP, .defaultToSpeaker]
 )
-// Prefer built-in mic to avoid switching AirPods to HFP
-if let builtIn = AVAudioSession.sharedInstance().availableInputs?
-    .first(where: { $0.portType == .builtInMic }) {
-    try? AVAudioSession.sharedInstance().setPreferredInput(builtIn)
+// Keep AirPods in A2DP by recording from built-in mic
+if let mic = session.availableInputs?.first(where: { $0.portType == .builtInMic }) {
+  try? session.setPreferredInput(mic)
 }
-try AVAudioSession.sharedInstance().setPreferredSampleRate(44100)
-try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(0.005)
-try AVAudioSession.sharedInstance().setActive(true)
+try session.setPreferredSampleRate(44100)
+try session.setPreferredIOBufferDuration(0.005)
+try session.setActive(true)
 ```
 
-Key points:
-- `.mixWithOthers` keeps other apps’ audio playing normally.
-- Don’t use `.duckOthers` (it lowers other audio).
-- Use `.allowBluetoothA2DP` instead of `.allowBluetooth` to avoid HFP (low‑quality) route.
+## 3) Recording Pipeline
+- Use `AVAudioRecorder` with AAC 44.1kHz mono for simplicity.
+- Save files under Documents with unique names (timestamp).
 
-## Background Continuity
-```swift
-NotificationCenter.default.addObserver(
-    forName: UIApplication.didEnterBackgroundNotification,
-    object: nil, queue: .main
-) { _ in
-    try? AVAudioSession.sharedInstance().setActive(true)
-    if isRecording { recorder.record() }
-    beginBackgroundTask()
-}
-
-NotificationCenter.default.addObserver(
-    forName: UIApplication.willEnterForegroundNotification,
-    object: nil, queue: .main
-) { _ in
-    endBackgroundTask()
-}
-
-func beginBackgroundTask() {
-    if backgroundTask == .invalid {
-        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "Recording") {
-            if isRecording { recorder.record() }
-        }
-    }
-}
-
-func endBackgroundTask() {
-    if backgroundTask != .invalid {
-        UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = .invalid
-    }
-}
-```
-
-This keeps the app alive through the transition period so the system recognizes an ongoing audio task.
-
-## Recorder Settings
+Example:
 ```swift
 let settings: [String: Any] = [
-    AVFormatIDKey: kAudioFormatMPEG4AAC,
-    AVSampleRateKey: 44100,
-    AVNumberOfChannelsKey: 1,
-    AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+  AVFormatIDKey: kAudioFormatMPEG4AAC,
+  AVSampleRateKey: 44100,
+  AVNumberOfChannelsKey: 1,
+  AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
 ]
-let url = documentsDir.appendingPathComponent("recording-YYYYMMDD-HHMMSS.m4a")
-recorder = try AVAudioRecorder(url: url, settings: settings)
-recorder?.isMeteringEnabled = true
-recorder?.record()
+let url = docs.appendingPathComponent("recording-YYYYMMDD-HHMMSS.m4a")
+let recorder = try AVAudioRecorder(url: url, settings: settings)
+recorder.isMeteringEnabled = true
+recorder.record()
 ```
 
-## Bluetooth, AirPods, and Quality
-- If you enable `.allowBluetooth`, iOS can switch to HFP when using a headset mic → output quality drops system‑wide.
-- To keep high‑quality output (A2DP), avoid `.allowBluetooth` and record from the phone’s built‑in mic with `.allowBluetoothA2DP`.
+## 4) Background Continuity
+- Keep the audio session active across background transitions.
+- Maintain a short `UIBackgroundTask` to bridge the transition.
+- Resume the recorder on background notifications.
 
-## Common Pitfalls
-- Missing `UIBackgroundModes=audio` in the actual target Info.plist (or capability not added) → app suspended in background.
-- Using `.duckOthers` → other audio becomes quieter.
-- Selecting the headset microphone (HFP) → AirPods audio becomes telephony‑quality.
-- Not re‑activating the session after interruptions/route changes → recorder silently stops.
-- Relying solely on the Simulator → background behavior differs; test on a real device.
+Example:
+```swift
+NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 
-## Files in This Repo
-- Info and capabilities: `SampleRecord/SampleRecord/Info.plist`
-- Session + recorder logic: `Audio/RecordingManager.swift`
-- Simple UI: `SampleRecord/SampleRecord/ContentView.swift`, `SampleRecord/SampleRecord/SampleRecordApp.swift`
+private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
-## Testing Notes
-- Real device, Developer Mode ON
-- Grant microphone permission
-- Start recording → press Home → wait → return and stop → play back file
-- Try YouTube/Music concurrently to confirm no ducking; confirm AirPods audio remains clear
+@objc func didEnterBackground() {
+  try? AVAudioSession.sharedInstance().setActive(true)
+  if recorder.isRecording { recorder.record() }
+  if backgroundTask == .invalid {
+    backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "Recording") {
+      if self.recorder.isRecording { self.recorder.record() }
+    }
+  }
+}
+
+@objc func willEnterForeground() {
+  if backgroundTask != .invalid {
+    UIApplication.shared.endBackgroundTask(backgroundTask)
+    backgroundTask = .invalid
+  }
+}
+```
+
+## 5) Interruptions and Route Changes
+- Handle `AVAudioSession.interruptionNotification`:
+  - On end, call `setActive(true)` and resume if needed.
+- Handle `AVAudioSession.routeChangeNotification`:
+  - Prefer built‑in mic to avoid HFP fallback.
+
+## 6) Playback and Coexistence
+- With `.mixWithOthers`, other apps continue playback at normal volume.
+- In-app playback during recording is supported with the same session.
+- Switch to `.playback` only if you need output‑only behavior (accept trade-offs accordingly).
+
+## 7) Testing Checklist
+- Real device with Developer Mode ON
+- Microphone permission granted
+- Start recording → press Home → wait → return → stop → play back
+- Verify YouTube/Music continues at normal volume (no ducking)
+- With AirPods connected, verify output quality remains high while using the phone’s mic
+
+## 8) Common Pitfalls
+- Missing `UIBackgroundModes=audio` in Info.plist → app suspends in background
+- Using `.duckOthers` → other audio volume drops
+- Enabling `.allowBluetooth` and using headset mic → HFP route lowers output quality
+- Not handling interruptions/route changes → recorder stops silently
+- Relying only on Simulator → different background behavior
+
+## 9) File Pointers (this project)
+- Info/Capabilities: `SampleRecord/SampleRecord/Info.plist`
+- Session + recording: `Audio/RecordingManager.swift`
+- UI examples: `SampleRecord/SampleRecord/ContentView.swift`, `SampleRecord/SampleRecord/SampleRecordApp.swift`
 
 </project-doc>
