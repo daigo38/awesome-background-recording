@@ -1,0 +1,226 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A1A1A1A1A1A1A1A1A1A1A01 /* SampleRecordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A11 /* SampleRecordApp.swift */; };
+		1A1A1A1A1A1A1A1A1A1A1A02 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A12 /* ContentView.swift */; };
+		1A1A1A1A1A1A1A1A1A1A1A03 /* RecordingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A13 /* RecordingManager.swift */; };
+		1A1A1A1A1A1A1A1A1A1A1A04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A20 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1A1A1A1A1A1A1A1A1A1A1A10 /* SampleRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A1A1A1A1A1A1A1A1A1A1A11 /* SampleRecordApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRecordApp.swift; sourceTree = "<group>"; };
+		1A1A1A1A1A1A1A1A1A1A1A12 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1A1A1A1A1A1A1A1A1A1A1A13 /* RecordingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecordingManager.swift; path = ../../Audio/RecordingManager.swift; sourceTree = "<group>"; };
+		1A1A1A1A1A1A1A1A1A1A1A20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A1A1A1A1A1A1A1A1A1A1A40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A1A1A1A1A1A1A1A1A1A1A50 = {
+			isa = PBXGroup;
+			children = (
+				1A1A1A1A1A1A1A1A1A1A1A60 /* SampleRecord */,
+				1A1A1A1A1A1A1A1A1A1A1A90 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1A1A1A1A1A1A1A1A1A1A1A60 /* SampleRecord */ = {
+			isa = PBXGroup;
+			children = (
+				1A1A1A1A1A1A1A1A1A1A1A11 /* SampleRecordApp.swift */,
+				1A1A1A1A1A1A1A1A1A1A1A12 /* ContentView.swift */,
+				1A1A1A1A1A1A1A1A1A1A1A13 /* RecordingManager.swift */,
+				1A1A1A1A1A1A1A1A1A1A1A20 /* Assets.xcassets */,
+			);
+			path = SampleRecord;
+			sourceTree = "<group>";
+		};
+		1A1A1A1A1A1A1A1A1A1A1A90 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A1A1A1A1A1A1A1A1A1A1A10 /* SampleRecord.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A1A1A1A1A1A1A1A1A1A1A70 /* SampleRecord */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A1A1A1A1A1A1A1A1A1A1A95 /* Build configuration list for PBXNativeTarget "SampleRecord" */;
+			buildPhases = (
+				1A1A1A1A1A1A1A1A1A1A1A30 /* Sources */,
+				1A1A1A1A1A1A1A1A1A1A1A40 /* Frameworks */,
+				1A1A1A1A1A1A1A1A1A1A1A41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SampleRecord;
+			productName = SampleRecord;
+			productReference = 1A1A1A1A1A1A1A1A1A1A1A10 /* SampleRecord.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A1A1A1A1A1A1A1A1A1A1A80 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					1A1A1A1A1A1A1A1A1A1A1A70 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 1A1A1A1A1A1A1A1A1A1A1A96 /* Build configuration list for PBXProject "SampleRecord" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A1A1A1A1A1A1A1A1A1A1A50;
+			productRefGroup = 1A1A1A1A1A1A1A1A1A1A1A90 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A1A1A1A1A1A1A1A1A1A1A70 /* SampleRecord */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A1A1A1A1A1A1A1A1A1A1A41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A1A1A1A1A1A1A1A1A1A1A04 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A1A1A1A1A1A1A1A1A1A1A30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A1A1A1A1A1A1A1A1A1A1A01 /* SampleRecordApp.swift in Sources */,
+				1A1A1A1A1A1A1A1A1A1A1A02 /* ContentView.swift in Sources */,
+				1A1A1A1A1A1A1A1A1A1A1A03 /* RecordingManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1A1A1A1A1A1A1A1A1A1A1AA0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8MU425T8JV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SampleRecord/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.SampleRecord;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A1A1A1A1A1A1A1A1A1A1AA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8MU425T8JV;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SampleRecord/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.SampleRecord;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1A1A1A1A1A1A1A1A1A1A1AB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_TESTABILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1A1A1A1A1A1A1A1A1A1A1AB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A1A1A1A1A1A1A1A1A1A1A95 /* Build configuration list for PBXNativeTarget "SampleRecord" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A1A1A1A1A1A1A1A1A1A1AA0 /* Debug */,
+				1A1A1A1A1A1A1A1A1A1A1AA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1A1A1A1A1A1A1A1A1A1A1A96 /* Build configuration list for PBXProject "SampleRecord" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A1A1A1A1A1A1A1A1A1A1AB0 /* Debug */,
+				1A1A1A1A1A1A1A1A1A1A1AB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A1A1A1A1A1A1A1A1A1A1A80 /* Project object */;
+}
