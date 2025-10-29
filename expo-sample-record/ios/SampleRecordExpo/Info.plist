@@ -30,6 +30,12 @@
           <string>com.example.sampleRecordExpo</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+sample-record-expo</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
@@ -45,7 +51,9 @@
       <true/>
     </dict>
     <key>NSMicrophoneUsageDescription</key>
-    <string>This app records audio in the background.</string>
+    <string>録音のためマイクへのアクセスを許可してください。</string>
+    <key>RCTNewArchEnabled</key>
+    <true/>
     <key>UIBackgroundModes</key>
     <array>
       <string>audio</string>

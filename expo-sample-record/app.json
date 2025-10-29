@@ -10,19 +10,30 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.example.sampleRecordExpo",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "NSMicrophoneUsageDescription": "This app records audio in the background."
-      }
+      },
+      "appleTeamId": "8MU425T8JV"
     },
-    "android": {},
-    "web": { "bundler": "metro" },
+    "android": {
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
     "plugins": [
       [
         "react-native-audio-api",
         {
           "iosMicrophonePermission": "録音のためマイクへのアクセスを許可してください。",
           "iosBackgroundMode": true,
-          "androidPermissions": ["android.permission.RECORD_AUDIO"],
+          "androidPermissions": [
+            "android.permission.RECORD_AUDIO"
+          ],
           "androidForegroundService": true
         }
       ]

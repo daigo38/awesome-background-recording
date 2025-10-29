@@ -2,7 +2,7 @@ Sample Record (Expo)
 
 Overview
 - Mirrors the iOS Swift sample: background-safe recording, no ducking of other audio, and AirPods remain in high-quality A2DP by avoiding HFP.
-- Uses `react-native-audio-api` to configure the iOS audio session and `expo-audio` for the recording engine.
+- Uses `react-native-audio-api` to configure the iOS audio session.これを使うことで、バックグラウンドで他のオーディオに影響を与えない録音を実現します。expo-audioなどのライブラリによる録音ではこれを実現できません。設定は以下の通り。
 
 Key APIs
 ```ts
@@ -26,7 +26,6 @@ Run (Development Build required)
 1) Install deps (Expo will pin compatible versions):
    - `cd expo-sample-record`
    - `npm i` or `pnpm i` or `yarn`
-   - `npx expo install expo-audio expo-asset`
    - `npm i react-native-audio-api`
 
 2) Create a development build:
