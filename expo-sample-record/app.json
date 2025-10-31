@@ -24,19 +24,6 @@
     },
     "web": {
       "bundler": "metro"
-    },
-    "plugins": [
-      [
-        "react-native-audio-api",
-        {
-          "iosMicrophonePermission": "録音のためマイクへのアクセスを許可してください。",
-          "iosBackgroundMode": true,
-          "androidPermissions": [
-            "android.permission.RECORD_AUDIO"
-          ],
-          "androidForegroundService": true
-        }
-      ]
-    ]
+    }
   }
 }
