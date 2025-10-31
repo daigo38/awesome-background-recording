@@ -17,7 +17,7 @@
     "react": "19.1.0",
     "react-native": "0.81.x",
     "react-native-nitro-modules": "^0.31.4",
-    "react-native-nitro-sound": "^0.2.9",
+    "react-native-nitro-sound": "file:../../react-native-nitro-sound/react-native-nitro-sound-0.2.9.tgz",
     "react-native-safe-area-context": "^5.6.1"
   }
 }

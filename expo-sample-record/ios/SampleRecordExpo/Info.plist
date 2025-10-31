@@ -51,7 +51,7 @@
       <true/>
     </dict>
     <key>NSMicrophoneUsageDescription</key>
-    <string>録音のためマイクへのアクセスを許可してください。</string>
+    <string>This app records audio in the background.</string>
     <key>RCTNewArchEnabled</key>
     <true/>
     <key>UIBackgroundModes</key>
