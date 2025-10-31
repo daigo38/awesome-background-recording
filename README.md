@@ -38,3 +38,19 @@ Files
 - `Audio/RecordingManager.swift` – Session setup and recording logic.
 - `Config/Info.plist` – Template entries to copy into your project's Info.plist.
 
+Expo Sample (React Native)
+
+- See `expo-sample-record/` for an Expo app that mirrors the Swift behavior.
+- It records in the background without ducking other audio and keeps AirPods on high‑quality A2DP by recording from the built‑in mic.
+
+Forked Nitro Sound
+
+- We forked `react-native-nitro-sound` to enforce iOS `AVAudioSession` options that match this Swift sample and avoid unwanted interruptions when other apps (YouTube, Music) play.
+- Fork repository: https://github.com/daigo38/react-native-nitro-sound.git
+- Effective configuration in the fork:
+  - Category: `.playAndRecord`
+  - Options: `[.mixWithOthers, .allowBluetoothA2DP, .defaultToSpeaker]`
+  - Not using: `.duckOthers`, `.allowBluetooth` (HFP)
+- In `expo-sample-record/package.json`, we pin the fork via a local tarball to ensure deterministic builds:
+  - `"react-native-nitro-sound": "file:../../react-native-nitro-sound/react-native-nitro-sound-0.2.9.tgz"`
+  - To update: build a new tarball from the fork with `npm pack`, update the file path, then run `npm i && npx pod-install` inside `expo-sample-record`.

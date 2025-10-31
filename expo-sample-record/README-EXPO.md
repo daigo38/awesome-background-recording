@@ -45,3 +45,16 @@ Run (Development Build required)
 Notes
 - Background: Recording continues in background via `UIBackgroundModes = audio`.
 - Session behavior: Nitro Sound configures the iOS audio session internally during recording/playback. If you need fine‑grained control (e.g., forcing A2DP-only output), additional native tweaks may be required.
+
+Forked Nitro Sound
+- Upstream `react-native-nitro-sound` does not strictly guarantee the iOS session options we need for non‑ducking background recording with A2DP preserved. To solve this, we use a fork that hard‑codes the following:
+  - Category: `.playAndRecord`
+  - Options: `[.mixWithOthers, .allowBluetoothA2DP, .defaultToSpeaker]`
+  - Not using: `.duckOthers`, `.allowBluetooth` (HFP)
+- Fork repository: https://github.com/daigo38/react-native-nitro-sound.git
+- This app pins the fork via a local tarball so the exact native code is captured:
+  - `package.json` → `"react-native-nitro-sound": "file:../../react-native-nitro-sound/react-native-nitro-sound-0.2.9.tgz"`
+  - Update steps when the fork changes:
+    1) In the fork repo, run `npm pack` (or `yarn pack`) to produce a new `.tgz`.
+    2) Replace the path in `package.json` to point to the new tarball.
+    3) Run `npm i` (or `yarn`) and then `npx pod-install`.
